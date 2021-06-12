@@ -10,7 +10,7 @@ class SoundController():
             self.hit_sound = pygame.mixer.Sound(path.join(SOUND_DIR, "explosion.wav"))
             self.coin_sound = pygame.mixer.Sound(path.join(SOUND_DIR, "coin.wav"))
             self.lose_sound = pygame.mixer.Sound(path.join(SOUND_DIR,"Powerup3.wav"))
-            pygame.mixer.music.load(path.join(SOUND_DIR, "BGM.mp3"))
+            pygame.mixer.music.load(path.join(SOUND_DIR, "BGM.ogg"))
             pygame.mixer.music.set_volume(0.4)
 
         else:
