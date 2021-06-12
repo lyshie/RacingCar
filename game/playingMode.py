@@ -127,6 +127,8 @@ class PlayingMode(GameMode):
     #                 car.status = False
 
     def _print_result(self):
+        old_winner = self.winner # TODO: clear unused 'pygame.Surface' object
+
         tem = []
         for user in self.winner:
             tem.append({"Player":str(user.car_no + 1) + "P",
@@ -136,6 +138,8 @@ class PlayingMode(GameMode):
                    "Distance":str(round(user.distance))+"m",
                    })
         self.winner = tem
+
+        old_winner.clear() # TODO: clear unused 'pygame.Surface' object
 
     def _init_user(self, user_no: int):
         self.car = UserCar((user_no)*100+160 , 0,user_no)
