@@ -5,12 +5,21 @@ from .gameMode import GameMode
 from .env import *
 import pygame
 import random
+# TODO something
 
+<<<<<<< HEAD
 class CoinMode(GameMode):
     def __init__(self, user_num: int, sound_controller):
         super(CoinMode, self).__init__()
         self.frame = 0
         pygame.font.init()
+=======
+class CoinPlayingMode(PlayingMode):
+    def __init__(self, user_num):
+        super(CoinPlayingMode, self).__init__(user_num)
+        self.creat_coin_time = pygame.time.get_ticks()
+        self.coins = pygame.sprite.Group()
+>>>>>>> fa34c7aa43c18c14874846de3b044d39d00db5f2
 
         '''set groups'''
         self.users = pygame.sprite.Group()
@@ -109,6 +118,7 @@ class CoinMode(GameMode):
                 self.running = False
             pass
 
+<<<<<<< HEAD
     def detect_collision(self):
         super(CoinMode,self).detect_collision()
         for car in self.cars:
@@ -145,6 +155,11 @@ class CoinMode(GameMode):
                    "Distance":str(round(user.distance))+"m",
                    })
         self.winner = tem
+=======
+        for car in self.user_cars:
+            car.update(command[car.car_no])
+            self.collide_coins(car)
+>>>>>>> fa34c7aa43c18c14874846de3b044d39d00db5f2
 
     def _init_user(self, user_no: int):
         self.car = UserCar((user_no)*100+160 , 0,user_no)
@@ -240,6 +255,7 @@ class CoinMode(GameMode):
                     pygame.draw.line(self.screen,RED,(700 + user.car_no*70,20),(700 + user.car_no*70 +20,70),2)
                     pygame.draw.line(self.screen, RED, (720 + user.car_no * 75, 20), (720 + user.car_no * 70 - 20, 70), 2)
 
+<<<<<<< HEAD
     def rank(self):
         user_value = []
         for car in self.users:
@@ -269,3 +285,54 @@ class CoinMode(GameMode):
             return True
         else:
             return False
+=======
+        for car in self.cars:
+            '''碰撞偵測'''
+            self.collide_with_cars(car)
+            '''偵測車子的狀態'''
+            self.detect_car_state(car)
+            self.cars_info.append(car.get_info())
+
+            '''更新車子位置'''
+            car.rect.centery += self.camera_vel - car.velocity
+
+        if len(self.user_cars) == 0:
+            self.print_result()
+            self.running = False
+            self.status = "GAMEOVER"
+
+    def creat_coins(self):
+        if pygame.time.get_ticks() - self.creat_coin_time > 5000:
+            coin = Coin(random.choice(self.lane_center), 0)
+            self.all_sprites.add(coin)
+            self.coins.add(coin)
+            self.creat_coin_time = pygame.time.get_ticks()
+        pass
+
+    def collide_coins(self,car):
+        hits = pygame.sprite.spritecollide(car, self.coins, True)
+        for hit in hits:
+            car.coin_num += 1
+        pass
+
+    def is_car_arrive_end(self, car):
+        if car.distance > self.end_line:
+            user_coins = []
+            for user in self.user_cars:
+                user_coins.append(user.coin_num)
+            for user in self.user_cars:
+                if user.coin_num == min(user_coins):
+                    user_coins.remove(user.coin_num)
+                    user.state = False
+                    self.detect_car_state(user)
+
+    def draw_user_imformation(self):
+        for car in self.user_cars:
+            self.draw_information(self.screen, "Player" + str(car.car_no+1) + "("+user_image[4][car.car_no]+")", 17, 510, (car.car_no) * 120 + 10)
+            self.draw_information(self.screen, "vel : " + str(round(car.velocity, 2)), 17, 510,
+                                  (car.car_no) * 120 + 40)
+            self.draw_information(self.screen, "distance : " + str(abs(round(car.distance, 2))), 17, 510,
+                                  (car.car_no) * 120 + 70)
+            self.draw_information(self.screen, "coins : " + str(car.coin_num), 17, 510,
+                                  (car.car_no) * 120 + 100)
+>>>>>>> fa34c7aa43c18c14874846de3b044d39d00db5f2
